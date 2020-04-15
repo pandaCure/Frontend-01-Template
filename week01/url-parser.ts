@@ -8,17 +8,48 @@ export interface IUrlInfo {
   query: string
   hash: string
 }
-// TODO:完善MockURLSearchParams
 class MockURLSearchParams {
-  private value: string
-  public constructor(value: string) {
-    this.value = value
+  private cacheSearch: {
+    [props: string]: string[]
   }
-  public append() {}
-  public delete() {}
-  public get() {}
-  public getAll() {}
-  public has() {}
+  public constructor(value: string | URLSearchParams) {
+    this.cacheSearch = Object.create(null)
+    if (typeof value === 'string') {
+      const queryArray = value.replace(/\?/, '').split('&')
+      queryArray.forEach((qr) => {
+        const handleQr = qr.split('=')
+        this.append(
+          encodeURIComponent(handleQr[0]),
+          handleQr.length > 1 ? encodeURIComponent(handleQr[1]) : ''
+        )
+      })
+    } else if (value instanceof URLSearchParams) {
+      value.forEach((value, name) => this.append(name, value))
+    } else {
+      throw new Error('无效参数')
+    }
+    // TODO:处理search
+  }
+  public append(name, value) {
+    const valueStr = value.toString()
+    if (name in this.cacheSearch) {
+      this.cacheSearch[name].push(valueStr)
+    } else {
+      this.cacheSearch[name] = [valueStr]
+    }
+  }
+  public delete(name) {
+    return delete this.cacheSearch[name]
+  }
+  public get(name: string) {
+    return name in this.cacheSearch ? this.cacheSearch[name][0] : null
+  }
+  public getAll(name: string) {
+    return name in this.cacheSearch ? this.cacheSearch[name].slice(0) : []
+  }
+  public has() {
+    return name in this.cacheSearch
+  }
   public forEach() {}
   public keys() {}
   public values() {}
@@ -41,11 +72,16 @@ class MockURL {
     auth: '(?:([^:]*)(?::([^@]*))?@)',
   }
   public constructor(url: string) {
-    // TODO:处理ASCII tab or newline,C0 control or space以及不标准url
-    this.urlInfo = this.parse(url)
+    this.urlInfo = this.parse(this.handleUrl(url))
   }
   public toString(): string {
     return this.href
+  }
+  private handleUrl(url: string): string {
+    // handle leading, trailing CO Ctr and space
+    const encodeUrl = encodeURI(url)
+    const remoteC0AndSpace = encodeUrl.replace(/^\%20|\%20$/g, '')
+    return remoteC0AndSpace
   }
   private parse(url: string): IUrlInfo {
     // https://url.spec.whatwg.org/#url-parsing
