@@ -1,0 +1,21 @@
+import matchStringLiterals from '../../matchStringLiterals'
+describe('StringLiteral :: DoubleStringCharacters(opt) SingleStringCharacters(opt)', () => {
+  test('DoubleStringCharacters(opt)', () => {
+    expect(matchStringLiterals('""')).toBeTruthy()
+    expect(matchStringLiterals('"\0"')).toBeTruthy()
+    expect(matchStringLiterals('"\u1234"')).toBeTruthy()
+    expect(matchStringLiterals('"\u{1234}"')).toBeTruthy()
+    expect(matchStringLiterals('"\\"')).toBeTruthy()
+    expect(matchStringLiterals('"\v"')).toBeTruthy()
+    expect(matchStringLiterals('"099877621361"')).toBeTruthy()
+    expect(matchStringLiterals('"0.0"')).toBeTruthy()
+    expect(matchStringLiterals('"adbjsabdasjdb1238123y87123"')).toBeTruthy()
+    expect(matchStringLiterals('"\n"')).toBeFalsy()
+    expect(matchStringLiterals('"""')).toBeFalsy()
+    expect(matchStringLiterals('"\r"')).toBeFalsy()
+    expect(matchStringLiterals('"\u000A"')).toBeFalsy()
+    expect(matchStringLiterals('"\u000D"')).toBeFalsy()
+    expect(matchStringLiterals('"aaaa\u000D\u000Abbbb\roooo\n"')).toBeFalsy()
+    expect(matchStringLiterals('"\0.676"')).toBeFalsy()
+  })
+})
