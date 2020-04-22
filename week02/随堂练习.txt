@@ -1,0 +1,17 @@
+1、编写带括号的四则运算产生式（老师上课讲的）
+<Number> = "0" | "1" | ... | "9"
+<DecimalNumber> = ("0" | ("1" | ... | "9") <Number>*)
+<AdditiveExpression> ::= <DecimalNumber>
+<AdditiveExpression> = <AdditiveExpression> "+" <DecimalNumber>
+// 另一种写法
+<AdditiveExpression> = <DecimalNumber> | <AdditiveExpression> "+" <DecimalNumber>
+// 最终版
+<AdditiveExpression> = <MultiplicativeExpression> | <AdditiveExpression> "+" <MultiplicativeExpression> | <AdditiveExpression> "-" <MultiplicativeExpression>
+
+<LogicalExpression> = <AdditiveExpression> | <LogicalExpression> "||" <AdditiveExpression> | <LogicalExpression> "&&" <AdditiveExpression>
+
+<PrimaryExpression> = <DecimalNumber> | "("<LogicalExpression> ")"
+2、尽可能寻找你知道的计算机语言，尝试把它们分类
+
+javscript 上下文相关+上下文无关
+python 上下文无关

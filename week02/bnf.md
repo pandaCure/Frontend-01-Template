@@ -53,7 +53,7 @@ BNF规定是推导规则(产生式)的集合，写为：
 //整数加法
 <Number> = "0" | "1" | ... | "9"
 <DecimalNumber> = ("0" | ("1" | ... | "9") <Number>*)
-<AdditiveExpression> ::                                                                                                                                                                              = <DecimalNumber>
+<AdditiveExpression> ::= <DecimalNumber>
 <AdditiveExpression> = <AdditiveExpression> "+" <DecimalNumber>
 // 另一种写法
 <AdditiveExpression> = <DecimalNumber> | <AdditiveExpression> "+" <DecimalNumber>
