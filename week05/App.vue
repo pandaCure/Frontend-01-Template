@@ -13,7 +13,6 @@
 
 <script lang="ts">
 import G6, { TreeGraph } from '@antv/g6'
-import data from './m'
 import { insertCss } from 'insert-css'
 import {
   handleInnerGlobalObject,
