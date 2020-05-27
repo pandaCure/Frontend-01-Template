@@ -50,3 +50,8 @@ Cache-Control
 
 ![请求开始](./http-cache-decision-tree.png)
 ![请求结束](./cache.png)
+
+## 参考
+[深入理解HTTP缓存机制及原理](https://juejin.im/post/5c93ba526fb9a070ca103898)
+[web性能优化之：no-cache与must-revalidate深入探究](https://segmentfault.com/a/1190000007317481)
+[HTTP 缓存](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching?hl=zh-cn)
