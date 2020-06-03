@@ -6,18 +6,26 @@
   <title>Document</title>
 </head>
 <style>
-  *#a *#target {
+  div {
     width: 100px;
     height: 100px;
     background-color: blueviolet;
+    position: relative;
+  }
+  div:hover .span::after {
+    content: 'sssss';
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 20px;
   }
 </style>
 <body>
   <div id="a">
     <div id="target">
-      <span>
+      <div class="a c" id="b" name="zzy">
         1
-      </span>
+      </div>
     </div>
   </div>
   <script src="./parse-css-rules.js"></script>
