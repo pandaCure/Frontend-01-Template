@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpackConfig = (env) => {
   return {
     mode: env ? 'production' : 'development',
-    entry: './week05/index.ts',
+    entry: './week11/index.ts',
     output: {
       filename: '[name].bundle.js',
       path: path.join(__dirname, 'dist')
@@ -29,6 +29,20 @@ const webpackConfig = (env) => {
           test: /\.(ts|js)$/,
           loader: 'babel-loader',
           exclude: [path.resolve(__dirname, 'node_modules')]
+        },
+        {
+          test: /\.css$/,
+          use: [
+            {
+              loader: env ? MiniCssExtractPlugin.loader : 'style-loader'
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: env
+              }
+            }
+          ]
         },
         {
           test: /\.scss$/,
