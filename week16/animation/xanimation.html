@@ -1,0 +1,119 @@
+<style>
+  #el {
+    width: 100px;
+    height: 100px;
+    background-color: skyblue;
+  }
+
+  #op {
+    margin-top: 500px;
+  }
+</style>
+<div id="el"></div>
+<div id="el2"></div>
+<div id="op">
+  <button id="pause-btn">pause</button>
+  <button id="resume-btn">resume</button>
+</div>
+<script type="module">
+
+  import { Timeline, Animation, ColorAnimation } from "./animation.js";
+  import { cubicBezier } from "./cubicBezier.js";
+
+  let linear = t => t;
+  let ease = cubicBezier(.25, .1, .25, 1);
+
+  let el = document.getElementById("el")
+  let pauseBtn = document.getElementById("pause-btn")
+  let resumeBtn = document.getElementById("resume-btn")
+
+  let tl = new Timeline;
+
+  const duration = 1000;
+
+  function colorTemplate(v) {
+    const { r, g, b, a } = v;
+    return `rgba(${r}, ${g}, ${b}, ${a})`;
+  }
+
+  function colorValueFromProgression(start, end, progression) {
+    return {
+      r: start.r + progression * (end.r - start.r),
+      g: start.g + progression * (end.g - start.g),
+      b: start.b + progression * (end.b - start.b),
+      a: start.a + progression * (end.a - start.a),
+    }
+  }
+  function runAnimation(duration) {
+    tl.add(new Animation({
+      object: el.style, porperty: "transform", start: 0, end: 200, duration, timingFunction: ease,
+      template: v => {
+        let transform = el.style.transform;
+        let [foo, x = 0, y = 0] = transform ? transform.match(/translate\((.*)(?:px), (.*)(?:px)\)/) : []
+        return `translate(${v}px, ${y}px)`
+      },
+    }));
+    tl.add(new Animation({
+      object: el.style, porperty: "backgroundColor", start: { r: 0, g: 0, b: 0, a: 1 }, end: { r: 255, g: 0, b: 0, a: 1 }, duration,
+      timingFunction: ease,
+      template: colorTemplate,
+      valueFromProgression: colorValueFromProgression
+    }));
+
+    tl.add(new Animation({
+      object: el.style, porperty: "transform", start: 0, end: 200, duration, delay: duration, timingFunction: ease,
+      template: v => {
+        let transform = el.style.transform;
+        let [foo, x = 0, y = 0] = transform ? transform.match(/translate\((.*)(?:px), (.*)(?:px)\)/) : []
+        return `translate(${x}px, ${v}px)`
+      },
+    }));
+    tl.add(new Animation({
+      object: el.style, porperty: "backgroundColor", delay: duration, start: { r: 255, g: 0, b: 0, a: 1 }, end: { r: 0, g: 0, b: 0, a: 1 }, duration,
+      timingFunction: ease,
+      template: colorTemplate,
+      valueFromProgression: colorValueFromProgression
+    }));
+
+    tl.add(new Animation({
+      object: el.style, porperty: "transform", start: 200, end: 0, delay: duration * 2, duration, timingFunction: ease,
+      template: v => {
+        let transform = el.style.transform;
+        let [foo, x = 0, y = 0] = transform ? transform.match(/translate\((.*)(?:px), (.*)(?:px)\)/) : []
+        return `translate(${v}px, ${y}px)`
+      },
+    }));
+    tl.add(new Animation({
+      object: el.style, porperty: "backgroundColor", delay: duration * 2, start: { r: 0, g: 0, b: 0, a: 1 }, end: { r: 255, g: 0, b: 0, a: 1 }, duration,
+      timingFunction: ease,
+      template: colorTemplate,
+      valueFromProgression: colorValueFromProgression
+    }));
+
+    tl.add(new Animation({
+      object: el.style, porperty: "transform", start: 200, end: 0, delay: duration * 3, duration, timingFunction: ease,
+      template: v => {
+        let transform = el.style.transform;
+        let [foo, x = 0, y = 0] = transform ? transform.match(/translate\((.*)(?:px), (.*)(?:px)\)/) : []
+        return `translate(${x}px, ${v}px)`
+      }
+    }));
+    tl.add(new Animation({
+      object: el.style, porperty: "backgroundColor", delay: duration * 3, start: { r: 255, g: 0, b: 0, a: 1 }, end: { r: 0, g: 0, b: 0, a: 1 }, duration,
+      timingFunction: ease,
+      template: colorTemplate,
+      valueFromProgression: colorValueFromProgression
+    }));
+  }
+
+  pauseBtn.addEventListener("click", () => {
+    tl.pause();
+  });
+  resumeBtn.addEventListener("click", () => {
+    tl.resume();
+  });
+
+  tl.start();
+  runAnimation(duration);
+
+</script>
